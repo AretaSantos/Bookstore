@@ -1,13 +1,36 @@
 package com.example.Bookstore;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+
+import com.example.Bookstore.web.Book;
 
 @SpringBootApplication
 public class BookstoreApplication {
-
+	private static final Logger log = LoggerFactory.getLogger(BookstoreApplication.class);
+	
 	public static void main(String[] args) {
 		SpringApplication.run(BookstoreApplication.class, args);
 	}
+	
+	@Bean
+	public CommandLineRunner Bookstore(BookRepository repository) {
+		return (args) -> {
+			log.info("Save a few books");
+			repository.save(new Book("It", "Stephen King", 1986, "1234", "29,90€"));
+			repository.save(new Book("Pet Sematary", "Stephen King", 1983, "2345", "34,90€"));	
+			
+			log.info("fetch all books");
+			for (Book book : repository.findAll()) {
+				log.info(book.toString());
+			}
 
+		};
+
+}
 }
